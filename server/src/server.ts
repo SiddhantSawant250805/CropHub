@@ -34,9 +34,12 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// ... existing imports and config ...
+
 app.use(async (req, res, next) => {
   try {
-    await rateLimiter.consume(req.ip);
+    // Fix: Fallback to 'anonymous' if ip is undefined
+    await rateLimiter.consume(req.ip || 'anonymous');
     next();
   } catch {
     res.status(429).json({
@@ -46,7 +49,8 @@ app.use(async (req, res, next) => {
   }
 });
 
-app.get('/health', (req, res) => {
+// Fix: Prefix unused req with _
+app.get('/health', (_req, res) => {
   res.status(200).json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
@@ -59,7 +63,8 @@ app.use('/api/terra', terraRoutes);
 app.use('/api/fathom', fathomRoutes);
 app.use('/api/logistics', logisticsRoutes);
 
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+// Fix: Prefix unused req and next with _
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Error:', err);
 
   res.status(err.status || 500).json({
@@ -69,13 +74,15 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   });
 });
 
-app.use((req, res) => {
+// Fix: Prefix unused req with _
+app.use((_req, res) => {
   res.status(404).json({
     success: false,
     error: 'Route not found'
   });
 });
 
+// ... rest of the file ...
 app.listen(PORT, () => {
   console.log(`CropHub API Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
