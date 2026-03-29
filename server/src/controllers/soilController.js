@@ -1,7 +1,9 @@
 import SoilAnalysis from '../models/SoilAnalysis.js';
 import { uploadToS3 } from '../services/s3Service.js';
-import { predictSoil } from '../services/mlService.js';
+import FormData from 'form-data';
+import axios from 'axios';
 
+const TERRA_LAYER_URL = process.env.TERRA_LAYER_URL || 'http://localhost:8000';
 export const analyzeSoil = async (req, res, next) => {
   try {
     if (!req.file) {
@@ -11,6 +13,8 @@ export const analyzeSoil = async (req, res, next) => {
       });
     }
 
+    const { lat = 34.05, lon = -118.24, survey = '{"texture":"Unknown"}' } = req.body;
+
     const uploadResult = await uploadToS3(req.file, 'soil-images');
 
     const soilAnalysis = await SoilAnalysis.create({
@@ -19,25 +23,27 @@ export const analyzeSoil = async (req, res, next) => {
       status: 'processing'
     });
 
-    const mlPrediction = await predictSoil(uploadResult.url);
+    let terraReport = null;
+    try {
+      const formData = new FormData();
+      formData.append('image', req.file.buffer, { filename: req.file.originalname, contentType: req.file.mimetype });
+      formData.append('lat', lat.toString());
+      formData.append('lon', lon.toString());
+      formData.append('survey', typeof survey === 'string' ? survey : JSON.stringify(survey));
 
-    soilAnalysis.soilType = mlPrediction.soilType || 'Unknown';
-    soilAnalysis.analysis = {
-      nitrogen: mlPrediction.analysis?.nitrogen || 0,
-      phosphorus: mlPrediction.analysis?.phosphorus || 0,
-      potassium: mlPrediction.analysis?.potassium || 0,
-      ph: mlPrediction.analysis?.ph || 7,
-      organicMatter: mlPrediction.analysis?.organicMatter || 0,
-      moisture: mlPrediction.analysis?.moisture || 0
-    };
-    soilAnalysis.composition = {
-      topsoil: mlPrediction.composition?.topsoil || 0,
-      clay: mlPrediction.composition?.clay || 0,
-      sand: mlPrediction.composition?.sand || 0,
-      silt: mlPrediction.composition?.silt || 0,
-      organic: mlPrediction.composition?.organic || 0
-    };
-    soilAnalysis.mlPredictionData = mlPrediction;
+      const response = await axios.post(`${TERRA_LAYER_URL}/api/analyze`, formData, {
+        headers: {
+          ...formData.getHeaders()
+        },
+        timeout: 30000
+      });
+      terraReport = response.data.report;
+    } catch(err) {
+      console.error('Terra Layer error:', err.message);
+      terraReport = { error: 'Terra Layer is unavailable' };
+    }
+
+    soilAnalysis.mlPredictionData = terraReport;
     soilAnalysis.status = 'completed';
 
     await soilAnalysis.save();
@@ -48,11 +54,9 @@ export const analyzeSoil = async (req, res, next) => {
         analysis: {
           id: soilAnalysis._id,
           imageUrl: soilAnalysis.imageUrl,
-          soilType: soilAnalysis.soilType,
-          analysis: soilAnalysis.analysis,
-          composition: soilAnalysis.composition,
           status: soilAnalysis.status,
-          createdAt: soilAnalysis.createdAt
+          createdAt: soilAnalysis.createdAt,
+          terraReport: terraReport 
         }
       }
     });
@@ -80,11 +84,9 @@ export const getSoilAnalyses = async (req, res, next) => {
         analyses: analyses.map(a => ({
           id: a._id,
           imageUrl: a.imageUrl,
-          soilType: a.soilType,
-          analysis: a.analysis,
-          composition: a.composition,
           status: a.status,
-          createdAt: a.createdAt
+          createdAt: a.createdAt,
+          terraReport: a.mlPredictionData
         })),
         pagination: {
           page,
@@ -119,11 +121,9 @@ export const getSoilAnalysisById = async (req, res, next) => {
         analysis: {
           id: analysis._id,
           imageUrl: analysis.imageUrl,
-          soilType: analysis.soilType,
-          analysis: analysis.analysis,
-          composition: analysis.composition,
           status: analysis.status,
-          createdAt: analysis.createdAt
+          createdAt: analysis.createdAt,
+          terraReport: analysis.mlPredictionData
         }
       }
     });
