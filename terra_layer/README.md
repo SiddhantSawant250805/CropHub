@@ -50,7 +50,7 @@ The service will be accessible at `http://localhost:8000`.
 Due to their considerable size, the following critical assets must be fetched manually.
 
 > [!IMPORTANT]
-> **Drive Repository:** [DRIVE_LINK_PLACEHOLDER]
+> **Drive Repository:** [https://drive.google.com/drive/folders/1x_sWvpO8PtXFJMgMUcmh0GAMXblFgMxS?usp=drive_link]
 > (Note: Contact the system administrator for the specific encrypted link)
 
 | Asset Name | Target Destination | Functional Purpose |
