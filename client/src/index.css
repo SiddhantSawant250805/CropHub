@@ -8,82 +8,83 @@
    DESIGN TOKENS — "Emerald Ledger" by Stitch
    ═══════════════════════════════════════════════ */
 @layer base {
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS — "Emerald Ledger" by Stitch
+   ═══════════════════════════════════════════════ */
+@layer base {
   :root {
-    /* ── Surface palette (dark green-black) ── */
-    --surface:              11 22 16;        /* #0b1610 */
-    --surface-dim:          11 22 16;
-    --surface-bright:       48 60 53;        /* #303c35 */
-    --surface-container-lowest: 6 16 11;     /* #06100b */
-    --surface-container-low:    19 30 24;    /* #131e18 */
-    --surface-container:        23 34 28;    /* #17221c */
-    --surface-container-high:   33 44 38;    /* #212c26 */
-    --surface-container-highest: 44 55 49;  /* #2c3731 */
+    /* ── Surface palette (original dark mode) ── */
+    --surface:              10 15 13;        /* #0a0f0d */
+    --surface-dim:          14 20 18;        /* #0e1412 */
+    --surface-bright:       26 36 32;        /* #1a2420 */
+    --surface-container-lowest: 6 10 8;
+    --surface-container-low:    12 18 16;
+    --surface-container:        20 30 25;
+    --surface-container-high:   28 42 35;
+    --surface-container-highest: 36 54 45;
 
-    /* ── On-Surface ── */
+    /* ── On-Surface (Light for readability) ── */
     --on-surface:           217 230 220;     /* #d9e6dc */
-    --on-surface-variant:   186 203 186;     /* #bacbba */
+    --on-surface-variant:   186 203 186;     /* #bacbab */
 
-    /* ── Primary — Electric Green ── */
-    --primary:              133 255 167;     /* #85ffa7 */
-    --primary-container:    0 232 122;       /* #00e87a */
+    /* ── Primary — Neon Emerald ── */
+    --primary:              0 232 122;       /* #00e87a */
+    --primary-container:    0 61 31;         /* #003d1f */
     --on-primary:           0 57 25;
 
     /* ── Secondary — Harvest Gold ── */
     --secondary:            255 185 85;      /* #ffb955 */
-    --secondary-container:  220 145 0;       /* #dc9100 */
+    --secondary-container:  124 81 0;
     --on-secondary:         69 43 0;
 
-    /* ── Tertiary — Loam Brown ── */
-    --tertiary:             255 224 215;
-    --tertiary-container:   235 193 181;
+    /* ── Tertiary — Slate ── */
+    --tertiary:             71 83 74;
+    --tertiary-container:   20 37 26;
 
     /* ── Outline ── */
-    --outline:              132 149 133;     /* #849585 */
-    --outline-variant:      59 74 61;        /* #3b4a3d */
+    --outline:              139 151 143;
+    --outline-variant:      67 76 70;
 
-    /* ── Semantic colours (shadcn compat) ── */
-    --background:           11 22 16;
+    /* ── Semantic colours ── */
+    --background:           10 15 13;
     --foreground:           217 230 220;
-    --card:                 23 34 28;
+    --card:                 15 22 19;
     --card-foreground:      217 230 220;
-    --popover:              33 44 38;
+    --popover:              15 22 19;
     --popover-foreground:   217 230 220;
     --primary-btn:          0 232 122;
     --primary-foreground:   0 57 25;
-    --secondary-bg:         44 55 49;
+    --secondary-bg:         30 45 38;
     --secondary-foreground: 217 230 220;
-    --muted:                33 44 38;
+    --muted:                25 35 30;
     --muted-foreground:     186 203 186;
     --accent:               255 185 85;
     --accent-foreground:    69 43 0;
-    --destructive:          255 180 171;
-    --destructive-foreground: 105 0 5;
-    --border:               59 74 61;
-    --input:                33 44 38;
+    --destructive:          255 80 80;
+    --destructive-foreground: 255 255 255;
+    --border:               40 55 48;
+    --input:                40 55 48;
     --ring:                 0 232 122;
     --radius: 0.75rem;
 
-    /* ── sidebar (keep original) ── */
-    --sidebar-background: 153 72% 10%;
-    --sidebar-foreground: 38 30% 90%;
-    --sidebar-primary: 40 100% 45%;
-    --sidebar-primary-foreground: 153 72% 10%;
-    --sidebar-accent: 153 50% 16%;
-    --sidebar-accent-foreground: 38 30% 93%;
-    --sidebar-border: 153 40% 18%;
-    --sidebar-ring: 40 100% 45%;
+    /* ── sidebar ── */
+    --sidebar-background: 153 10% 7%;
+    --sidebar-foreground: 153 5% 85%;
+    --sidebar-primary: 153 100% 46%;
+    --sidebar-primary-foreground: 153 100% 5%;
+    --sidebar-accent: 153 20% 12%;
+    --sidebar-accent-foreground: 153 5% 95%;
+    --sidebar-border: 153 15% 15%;
+    --sidebar-ring: 153 100% 46%;
 
-    /* ── CropHub custom tokens ── */
-    --loam:        20 30% 22%;
-    --harvest:     40 100% 45%;
-    --sand:        38 30% 93%;
-    --emerald-deep: 153 72% 14%;
-
-    /* ── NEW dark-system tokens ── */
-    --emerald-accent: #00e87a;
-    --harvest-gold:   #ffb955;
-    --loam-warm:      #c49a6c;
+    /* ── CropHub custom ── */
+    --loam:        153 15% 12%;
+    --harvest:     37 80% 67%;
+    --sand:        37 40% 85%;
+    --emerald-deep: 153 50% 15%;
   }
+}
+
 }
 
 /* ═══════════════════════════════════════════════
@@ -266,7 +267,7 @@
     transition: all 0.2s ease;
     box-shadow:
       0 0 20px rgba(0, 232, 122, 0.25),
-      0 4px 15px rgba(0, 0, 0, 0.3);
+      0 4px 15px rgba(0, 0, 0, 0.5);
     text-decoration: none;
   }
   .btn-primary:hover {

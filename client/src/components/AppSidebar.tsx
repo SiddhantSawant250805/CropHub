@@ -51,14 +51,14 @@ export function AppSidebar() {
     <motion.aside
       animate={{ width: collapsed ? 72 : 248 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="h-screen sticky top-0 flex flex-col z-50 overflow-visible shrink-0"
-      style={{ background: "rgb(var(--surface-container-low))", borderRight: "1px solid rgba(0,232,122,0.08)" }}
+      className="h-screen sticky top-0 flex flex-col z-50 overflow-visible shrink-0 glass-card"
+      style={{ background: "#0a0f0d", borderRight: "1px solid rgba(0, 232, 122, 0.1)" }}
     >
       {/* ── Logo ── */}
-      <div className="flex items-center gap-3 px-4 h-16 border-b shrink-0" style={{ borderColor: "rgba(0,232,122,0.08)" }}>
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-          style={{ background: "rgba(0,232,122,0.12)", border: "1px solid rgba(0,232,122,0.25)" }}>
-          <Sprout className="w-4 h-4" style={{ color: "#00e87a" }} />
+      <div className="flex items-center gap-3 px-6 h-20 border-b shrink-0" style={{ borderColor: "rgba(0, 232, 122, 0.1)" }}>
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+          style={{ background: "rgba(0, 232, 122, 0.1)", border: "1px solid rgba(0, 232, 122, 0.2)" }}>
+          <Sprout className="w-5 h-5 text-[#00e87a]" />
         </div>
         <AnimatePresence>
           {!collapsed && (
@@ -66,10 +66,10 @@ export function AppSidebar() {
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: "auto" }}
               exit={{ opacity: 0, width: 0 }}
-              className="text-lg font-bold whitespace-nowrap overflow-hidden font-outfit"
-              style={{ color: "rgb(var(--on-surface))" }}
+              className="text-2xl font-black whitespace-nowrap overflow-hidden font-outfit"
+              style={{ color: "white" }}
             >
-              Crop<span style={{ color: "#00e87a" }}>Hub</span>
+              Crop<span className="text-[#00e87a]">Hub</span>
             </motion.span>
           )}
         </AnimatePresence>
@@ -83,40 +83,44 @@ export function AppSidebar() {
             <NavLink
               key={item.path}
               to={item.path}
-              className="relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group"
+              className="relative flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group"
               style={{
-                background: isActive ? "rgba(0,232,122,0.1)" : "transparent",
-                color: isActive ? "#00e87a" : "rgba(217,230,220,0.6)",
+                background: isActive ? "rgba(0, 232, 122, 0.1)" : "transparent",
+                color: isActive ? "#00e87a" : "rgba(255, 255, 255, 0.4)",
               }}
               onMouseEnter={(e) => {
-                if (!isActive) (e.currentTarget as HTMLElement).style.background = "rgba(0,232,122,0.05)";
-                if (!isActive) (e.currentTarget as HTMLElement).style.color = "rgb(217,230,220)";
+                if (!isActive) {
+                  (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.03)";
+                  (e.currentTarget as HTMLElement).style.color = "white";
+                }
               }}
               onMouseLeave={(e) => {
-                if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent";
-                if (!isActive) (e.currentTarget as HTMLElement).style.color = "rgba(217,230,220,0.6)";
+                if (!isActive) {
+                  (e.currentTarget as HTMLElement).style.background = "transparent";
+                  (e.currentTarget as HTMLElement).style.color = "rgba(255, 255, 255, 0.4)";
+                }
               }}
             >
               {/* Active indicator bar */}
               {isActive && (
                 <motion.div
                   layoutId="activeBar"
-                  className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-full"
-                  style={{ background: "#00e87a" }}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-full"
+                  style={{ background: "#00e87a", boxShadow: "0 0 15px rgba(0, 232, 122, 0.5)" }}
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
               <item.icon className="w-4.5 h-4.5 shrink-0" />
               <AnimatePresence>
                 {!collapsed && (
-                  <motion.span
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="text-sm font-medium whitespace-nowrap overflow-hidden"
-                  >
-                    {item.title}
-                  </motion.span>
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="text-sm font-bold tracking-wide whitespace-nowrap overflow-hidden"
+                    >
+                      {item.title}
+                    </motion.span>
                 )}
               </AnimatePresence>
             </NavLink>
@@ -125,7 +129,7 @@ export function AppSidebar() {
       </nav>
 
       {/* ── User card ── */}
-      <div className="px-2 pb-2 border-t relative" ref={menuRef} style={{ borderColor: "rgba(0,232,122,0.08)" }}>
+      <div className="px-2 pb-2 border-t relative" ref={menuRef} style={{ borderColor: "rgba(var(--primary), 0.1)" }}>
         <AnimatePresence>
           {menuOpen && (
             <motion.div
@@ -133,26 +137,23 @@ export function AppSidebar() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="absolute bottom-full left-2 right-2 mb-1 rounded-xl overflow-hidden shadow-2xl z-50"
+              className="absolute bottom-full left-2 right-2 mb-2 rounded-[1.5rem] overflow-hidden shadow-2xl z-50 border border-white/5"
               style={{
-                background: "rgb(var(--surface-container-high))",
-                border: "1px solid rgba(0,232,122,0.12)",
+                background: "#0e1412",
               }}
             >
-              <div className="px-4 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                <p className="text-xs uppercase tracking-wider font-medium" style={{ color: "rgba(186,203,186,0.5)" }}>Signed in as</p>
-                <p className="text-sm font-semibold truncate mt-0.5" style={{ color: "rgb(var(--on-surface))" }}>{user?.name}</p>
-                <p className="text-xs truncate" style={{ color: "rgba(186,203,186,0.6)" }}>{user?.email}</p>
+              <div className="px-5 py-4 border-b border-white/5">
+                <p className="text-[10px] uppercase tracking-widest font-bold text-white/20 mb-1">Signed in as</p>
+                <p className="text-sm font-bold text-white truncate">{user?.name}</p>
+                <p className="text-xs text-white/40 truncate mt-0.5">{user?.email}</p>
               </div>
               <button onClick={handleSettings}
-                className="w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors hover:bg-white/5"
-                style={{ color: "rgba(217,230,220,0.8)" }}>
+                className="w-full flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-white/60 transition-all hover:bg-white/5 hover:text-[#00e87a]">
                 <Settings className="w-4 h-4 shrink-0" />
-                <span>Settings</span>
+                <span>Account Settings</span>
               </button>
               <button onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
-                style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+                className="w-full flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-red-400 hover:bg-red-500/10 transition-all border-t border-white/5">
                 <LogOut className="w-4 h-4 shrink-0" />
                 <span>Log out</span>
               </button>
@@ -162,25 +163,25 @@ export function AppSidebar() {
 
         <button
           onClick={() => setMenuOpen((o) => !o)}
-          className="w-full mt-2 flex items-center gap-3 px-2 py-2.5 rounded-xl transition-colors"
-          style={{ background: menuOpen ? "rgba(0,232,122,0.06)" : "transparent" }}
-          onMouseEnter={(e) => { if (!menuOpen) (e.currentTarget as HTMLElement).style.background = "rgba(0,232,122,0.05)"; }}
+          className="w-full mt-4 flex items-center gap-3 px-3 py-3 rounded-2xl transition-all"
+          style={{ background: menuOpen ? "rgba(255, 255, 255, 0.05)" : "transparent" }}
+          onMouseEnter={(e) => { if (!menuOpen) (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.03)"; }}
           onMouseLeave={(e) => { if (!menuOpen) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
         >
           <div
-            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 text-white ring-2"
-            style={{ background: `hsl(${avatarHue}, 50%, 30%)`, ringColor: "rgba(0,232,122,0.25)" }}
+            className="w-9 h-9 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 text-white ring-2 ring-white/10"
+            style={{ background: `hsl(${avatarHue}, 60%, 30%)` }}
           >
             {initials}
           </div>
           <AnimatePresence>
             {!collapsed && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 min-w-0 text-left">
-                <p className="text-sm font-semibold truncate leading-tight" style={{ color: "rgb(var(--on-surface))" }}>
+                <p className="text-sm font-bold text-white truncate leading-tight">
                   {user?.name ?? "Account"}
                 </p>
-                <p className="text-xs truncate leading-tight" style={{ color: "rgba(186,203,186,0.5)" }}>
-                  {user?.email ?? ""}
+                <p className="text-[10px] font-bold text-[#00e87a] uppercase tracking-widest truncate mt-0.5 opacity-60">
+                  Premium Tier
                 </p>
               </motion.div>
             )}
@@ -188,8 +189,8 @@ export function AppSidebar() {
           <AnimatePresence>
             {!collapsed && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="shrink-0">
-                <ChevronUp className={`w-4 h-4 transition-transform`}
-                  style={{ color: "rgba(186,203,186,0.5)", transform: menuOpen ? "rotate(180deg)" : "rotate(0deg)" }} />
+                <ChevronUp className="w-4 h-4 text-white/20 transition-transform"
+                  style={{ transform: menuOpen ? "rotate(180deg)" : "rotate(0deg)" }} />
               </motion.div>
             )}
           </AnimatePresence>
@@ -199,12 +200,9 @@ export function AppSidebar() {
       {/* ── Collapse toggle ── */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="flex items-center justify-center h-9 transition-colors"
-        style={{ borderTop: "1px solid rgba(0,232,122,0.08)", color: "rgba(186,203,186,0.4)" }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#00e87a"; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(186,203,186,0.4)"; }}
+        className="flex items-center justify-center h-12 transition-all border-t border-white/5 text-white/20 hover:text-[#00e87a] hover:bg-white/5"
       >
-        {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+        {collapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
       </button>
     </motion.aside>
   );

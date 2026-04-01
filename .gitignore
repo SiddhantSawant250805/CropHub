@@ -1,2 +1,24 @@
+# Dependencies
 node_modules/
+**/node_modules/
+
+# Secrets
 .env
+**/.env
+*.csv
+
+# Python
+terra_layer/venv/
+**/__pycache__/
+terra_layer/dataset/
+terra_layer/model.h5
+
+# Build outputs
+client/dist/
+dist/
+
+# OS & Editors
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

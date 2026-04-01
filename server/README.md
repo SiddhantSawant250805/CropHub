@@ -1,240 +1,120 @@
-# CropHub Backend API
+# CropHub Server (Backend API)
 
-Backend API server for the CropHub Agricultural Decision Support System built with Node.js, Express, and MongoDB.
+The backend of CropHub is a robust RESTful API built with Node.js, Express, and MongoDB. It manages user authentication, encrypted data storage, and coordinates between the frontend and the AI intelligence layers.
 
-## Features
+---
 
-- User authentication with JWT
-- Encrypted budget storage using AES-256-CBC
-- Soil analysis with image upload to AWS S3
-- ML service integration for soil prediction
-- Crop planning and optimization
-- Market arbitrage analysis
-- RESTful API design
-- MongoDB with Mongoose ODM
+## 🚀 Quick Start & Setup
 
-## Prerequisites
-
-- Node.js (v18 or higher)
-- MongoDB (local or Atlas)
-- AWS S3 account (for image storage)
-- Optional: Python ML service running
-
-## Installation
-
-1. Install dependencies:
+### 1. Install Dependencies
 ```bash
+cd server
 npm install
 ```
 
-2. Create `.env` file:
+### 2. Configure Environment Variables
+Create a `.env` file in the `server` directory (refer to `.env.example`).
+**Required Variables:**
+- `MONGODB_URI`: Your MongoDB connection string.
+- `JWT_SECRET`: Secure random string for token signing.
+- `ENCRYPTION_KEY`: Exactly 32 characters for budget encryption.
+- `ENCRYPTION_IV`: Exactly 16 characters for budget encryption.
+- `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`: For S3 image storage.
+
+### 3. Database Setup (MongoDB)
+- **Local**: Install and start `mongodb-community`.
+- **Cloud**: Use MongoDB Atlas and whitelist your server IP.
+
+### 4. Start the Server
 ```bash
-cp .env.example .env
-```
-
-3. Update environment variables in `.env`:
-   - Set `MONGODB_URI` to your MongoDB connection string
-   - Set `JWT_SECRET` to a secure random string
-   - Set `ENCRYPTION_KEY` (exactly 32 characters)
-   - Set `ENCRYPTION_IV` (exactly 16 characters)
-   - Configure AWS credentials if using S3
-   - Set `CORS_ORIGIN` to your frontend URL
-
-## Running the Server
-
-Development mode with auto-reload:
-```bash
+# Development (with nodemon)
 npm run dev
-```
 
-Production mode:
-```bash
+# Production
 npm start
 ```
+The server runs on `http://localhost:5000` by default.
 
-The server will start on port 5000 by default (or the PORT in your .env file).
+---
 
-## API Endpoints
+## 🏗️ Architecture Overview
 
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-- `GET /api/auth/me` - Get current user (protected)
-- `PUT /api/auth/profile` - Update user profile (protected)
+### Core Layers
+- **Controllers**: Logic for Auth, Soil Analysis, Crop Planning, and Market Data.
+- **Models**: Mongoose schemas for User, SoilAnalysis, CropPlan, and MarketAnalysis.
+- **Middleware**: JWT Verification, Error Handling, and Multer (file uploads).
+- **Services**: Integrations for AWS S3 and the Python ML service.
 
-### Soil Analysis (Terra Layer)
-- `POST /api/soil/analyze` - Upload and analyze soil image (protected)
-- `GET /api/soil` - Get all soil analyses (protected)
-- `GET /api/soil/:id` - Get specific soil analysis (protected)
+### Security Features
+- **JWT Authentication**: Secure stateless sessions.
+- **AES-256-CBC Encryption**: Used for sensitive financial data (budgets).
+- **Rate Limiting**: 100 requests per 15 minutes per IP.
+- **Helmet.js**: Security headers for HTTP protection.
 
-### Crop Planning (Fathom Layer)
-- `POST /api/crop/plan` - Create crop plan (protected)
-- `GET /api/crop/plans` - Get all crop plans (protected)
-- `GET /api/crop/plans/:id` - Get specific crop plan (protected)
-- `PATCH /api/crop/plans/:id/status` - Update plan status (protected)
+---
 
-### Market Analysis (Logistics)
-- `POST /api/market/analyze` - Analyze markets for crop (protected)
-- `GET /api/market/analyses` - Get market analyses (protected)
-- `GET /api/market/prices` - Get market prices (protected)
+## 📋 API Reference
 
-### Health Check
-- `GET /api/health` - Check API status
+**Base URL**: `http://localhost:5000/api`
 
-## API Request Examples
+### 🔑 Authentication
+| Method | Endpoint | Description | Protected |
+| :--- | :--- | :--- | :--- |
+| POST | `/auth/register` | Register a new user | No |
+| POST | `/auth/login` | Login and receive JWT | No |
+| GET | `/auth/me` | Get current user profile | Yes |
+| PUT | `/auth/profile` | Update user settings | Yes |
 
-### Register User
-```bash
-curl -X POST http://localhost:5000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "John Farmer",
-    "email": "john@example.com",
-    "password": "password123"
-  }'
-```
+### 🌱 Soil Analysis (Terra Layer)
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| POST | `/soil/analyze` | Upload JPEG/PNG (max 10MB) for analysis |
+| GET | `/soil` | List all historical analyses |
+| GET | `/soil/:id` | Get details of a specific analysis |
 
-### Login
-```bash
-curl -X POST http://localhost:5000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "john@example.com",
-    "password": "password123"
-  }'
-```
+### 📈 Crop Planning (Fathom Layer)
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| POST | `/crop/plan` | Generate allocation based on budget/land |
+| GET | `/crop/plans` | List active crop plans |
 
-### Analyze Soil (with JWT token)
-```bash
-curl -X POST http://localhost:5000/api/soil/analyze \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
-  -F "soilImage=@/path/to/soil.jpg"
-```
+### 🚛 Market Analysis (Logistics)
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| POST | `/market/analyze` | Find best market for a specific crop |
+| GET | `/market/prices` | Get current market trends |
 
-### Create Crop Plan
-```bash
-curl -X POST http://localhost:5000/api/crop/plan \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
-  -d '{
-    "budget": 200000,
-    "landSize": 15,
-    "season": "Kharif 2024"
-  }'
-```
+---
 
-### Analyze Markets
-```bash
-curl -X POST http://localhost:5000/api/market/analyze \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
-  -d '{
-    "cropType": "Maize",
-    "weightTons": 5,
-    "farmLocation": {
-      "type": "Point",
-      "coordinates": [77.5946, 12.9716]
-    }
-  }'
-```
+## 🔒 Advanced Security Patterns
 
-## Database Schema
+The server implements a **Multi-Stage Security Engine** to protect sensitive agricultural and financial data.
 
-### User
-- name, email, password (hashed)
-- encryptedBudget (AES-256-CBC encrypted)
-- farmLocation (GeoJSON Point)
-- landSize
+- **Fathom Layer Cryptography**:
+  ```javascript
+  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+  let encrypted = cipher.update(data);
+  // ... encrypted before MongoDB persist
+  ```
+- **Image Pipeline Isolation**: Uploaded images are passed through a validation buffer before being streamed to AWS S3, ensuring zero malicious file ingestion.
+- **Node-side Proxy**: The server acts as a secure reverse proxy for the Python ML service, shielding the intelligence layer from direct external exposure.
 
-### SoilAnalysis
-- user reference
-- imageUrl (S3)
-- soilType
-- analysis (N, P, K, pH, organic matter, moisture)
-- composition (topsoil, clay, sand, silt, organic)
-- status, mlPredictionData
+---
 
-### CropPlan
-- user reference
-- budget, landSize
-- allocations array (crop allocations)
-- summary (totals and profit)
-- status, season
+## 📁 Modular Directory Structure
 
-### MarketAnalysis
-- user reference
-- cropType, weightTons
-- farmLocation (GeoJSON)
-- markets array (market comparison data)
-- bestMarket
-
-## Security Features
-
-- JWT authentication
-- Password hashing with bcrypt
-- Budget encryption with AES-256-CBC
-- CORS protection
-- Rate limiting
-- Helmet.js security headers
-- Input validation
-
-## ML Service Integration
-
-The backend expects a Python ML service at `ML_SERVICE_URL` with these endpoints:
-
-- `POST /predict-soil` - Soil image analysis
-  - Input: `{ "image_url": "..." }`
-  - Output: `{ "soilType", "analysis", "composition" }`
-
-- `POST /optimize-crops` - Crop optimization
-  - Input: `{ "budget", "land_size", "preferences" }`
-  - Output: `{ "allocations": [...] }`
-
-If the ML service is unavailable, the backend uses fallback algorithms with mock data.
-
-## Project Structure
-
-```
+```text
 server/
-├── src/
-│   ├── config/
-│   │   └── db.js                 # MongoDB connection
-│   ├── controllers/
-│   │   ├── authController.js     # Auth logic
-│   │   ├── soilController.js     # Soil analysis
-│   │   ├── cropController.js     # Crop planning
-│   │   └── marketController.js   # Market analysis
-│   ├── middleware/
-│   │   ├── auth.js               # JWT authentication
-│   │   ├── errorHandler.js       # Error handling
-│   │   └── upload.js             # File upload (multer)
-│   ├── models/
-│   │   ├── User.js               # User schema
-│   │   ├── SoilAnalysis.js       # Soil analysis schema
-│   │   ├── CropPlan.js           # Crop plan schema
-│   │   └── MarketAnalysis.js     # Market analysis schema
-│   ├── routes/
-│   │   ├── authRoutes.js         # Auth routes
-│   │   ├── soilRoutes.js         # Soil routes
-│   │   ├── cropRoutes.js         # Crop routes
-│   │   └── marketRoutes.js       # Market routes
-│   ├── services/
-│   │   ├── s3Service.js          # AWS S3 operations
-│   │   ├── mlService.js          # ML service integration
-│   │   └── marketService.js      # Market calculations
-│   ├── utils/
-│   │   └── encryption.js         # AES encryption/decryption
-│   └── server.js                 # Entry point
-├── .env.example
-├── .gitignore
-├── package.json
-└── README.md
+├── config/             # DB & Middleware configurations
+├── controllers/        # Business logic & resource management
+├── middleware/         # Security, JWT, & Multer buffering
+├── models/             # Mongoose schemas for persistence
+├── services/           # AWS S3 & ML Service integrations
+├── .env.example        # Reference for infrastructure secrets
+└── index.js            # Node.js orchestration entry point
 ```
 
-## Environment Variables
+---
 
-See `.env.example` for all required environment variables.
-
-## License
-
-MIT
+## 📄 License
+MIT — Scalable Backend for Precision Agriculture.

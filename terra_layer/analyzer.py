@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class TerraAnalyzer:
     def __init__(self, model_path="model.h5"):
         self.model_path = model_path
-        self.soil_classes = ['Clay', 'Sand', 'Silt', 'Loam', 'Peat', 'Chalk'] # Sample classes
+        self.soil_classes = ['Alluvial_Soil', 'Arid_Soil', 'Black_Soil', 'Laterite_Soil', 'Mountain_Soil', 'Red_Soil', 'Yellow_Soil']
         self.model = None
         if load_model:
             try:
@@ -102,6 +102,7 @@ class TerraAnalyzer:
         
         # Extract inputs
         survey_texture = survey.get("texture", "Unknown")
+        survey_wetness = int(survey.get("wetness", 5)) # 1-10 scale
         image_texture = "Smooth" if image_data.get("graininess", 0) < 500 else "Grainy"
         ph = location_data.get("pH", 7.0)
         temp_c = weather.get("temp_c", 20.0)
@@ -122,9 +123,15 @@ class TerraAnalyzer:
         hydrology_alert = "Conditions are stable."
         workability_window = "Soil is prime for working over the next 48 hours."
         
-        if (survey_texture.lower() == 'clay' or image_texture == 'Smooth') and rain_mm > 10:
+        if survey_wetness >= 8 and rain_mm > 5:
+            hydrology_alert = f"**Critical Warn: Flooding/Runoff Risk.** Manual moisture is high ({survey_wetness}/10) and {rain_mm}mm rain is expected."
+            workability_window = "**Avoid all tilling and heavy machinery** to prevent severe soil compaction and structure destruction."
+        elif (survey_texture.lower() == 'clay' or image_texture == 'Smooth') and rain_mm > 10:
             hydrology_alert = "**Warn: Compaction/Drainage Risk.** Heavy clay properties combined with incoming rain."
             workability_window = "**Avoid tilling today** due to high moisture; wait 48 hours to prevent severe compaction."
+        elif survey_wetness <= 3 and temp_c > 30:
+            hydrology_alert = f"**Warn: Severe Drought Stress.** Manual moisture is critically low ({survey_wetness}/10) with extreme heat ({temp_c}°C)."
+            workability_window = "Prioritize deep and immediate irrigation to salvage root structures."
         elif (survey_texture.lower() == 'sand' or image_texture == 'Grainy') and temp_c > 32:
             hydrology_alert = "**Warn: Moisture Stress Risk.** Sandy soil drains fast, and the high heat will evaporate remaining moisture."
             workability_window = "Prioritize deep watering immediately. Early morning or late evening is best."
@@ -142,11 +149,11 @@ class TerraAnalyzer:
 
         # The 72-Hour Action Plan
         action_plan = []
-        if rain_mm > 10:
-            action_plan.append("Suspend any scheduled fertilizer application to prevent runoff.")
+        if rain_mm > 10 or survey_wetness >= 8:
+            action_plan.append("Suspend any scheduled fertilizer application to prevent nutrient runoff.")
             action_plan.append("Ensure drainage channels or furrows are clear before the rain begins.")
-        elif temp_c > 32:
-            action_plan.append("Because organic matter might dry out fast and heat is coming, apply 2 inches of mulch today.")
+        elif temp_c > 32 or survey_wetness <= 3:
+            action_plan.append("Because soil moisture is low and heat is imminent, apply 2 inches of mulch today.")
             action_plan.append("Irrigate deeply at the root zone rather than overhead.")
         else:
             action_plan.append("Current weather supports light top-dressing of organic compost if needed.")

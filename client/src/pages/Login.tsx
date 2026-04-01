@@ -42,51 +42,46 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex" style={{ background: "rgb(var(--surface))" }}>
+    <div className="min-h-screen flex bg-[#0a0f0d]">
       {/* ── Left branding panel ── */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden items-center justify-center"
-        style={{ background: "rgb(var(--surface-container-low))", borderRight: "1px solid rgba(0,232,122,0.08)" }}>
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden items-center justify-center bg-[#070b0a] border-r border-white/5">
         {/* Aurora blobs */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
+          <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.3, 0.15] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(0,232,122,0.12) 0%, transparent 70%)", filter: "blur(60px)" }} />
-          <motion.div animate={{ scale: [1, 1.15, 1], opacity: [0.1, 0.25, 0.1] }}
+            className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-[#00e87a]/10 blur-[100px]" />
+          <motion.div animate={{ scale: [1, 1.15, 1], opacity: [0.1, 0.2, 0.1] }}
             transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-            className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(255,185,85,0.1) 0%, transparent 70%)", filter: "blur(60px)" }} />
+            className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-[#ffb955]/5 blur-[100px]" />
         </div>
         {/* Grid */}
-        <div className="absolute inset-0 opacity-[0.025]" style={{
-          backgroundImage: "linear-gradient(rgba(0,232,122,1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,232,122,1) 1px, transparent 1px)",
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: "linear-gradient(#00e87a 1px, transparent 1px), linear-gradient(90deg, #00e87a 1px, transparent 1px)",
           backgroundSize: "48px 48px",
         }} />
         {/* Content */}
         <div className="relative z-10 max-w-sm px-12">
-          <div className="flex items-center gap-3 mb-12">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ background: "rgba(0,232,122,0.12)", border: "1px solid rgba(0,232,122,0.3)" }}>
-              <Sprout className="w-5 h-5" style={{ color: "#00e87a" }} />
+          <div className="flex items-center gap-4 mb-12">
+            <div className="w-12 h-12 rounded-2xl bg-[#00e87a]/10 flex items-center justify-center border border-[#00e87a]/20 shadow-lg shadow-[#00e87a]/10">
+              <Sprout className="w-6 h-6 text-[#00e87a]" />
             </div>
-            <span className="text-xl font-bold font-outfit" style={{ color: "rgb(var(--on-surface))" }}>
-              Crop<span style={{ color: "#00e87a" }}>Hub</span>
+            <span className="text-2xl font-black font-outfit text-white tracking-tight">
+              Crop<span className="text-[#00e87a]">Hub</span>
             </span>
           </div>
-          <h1 className="text-4xl font-outfit font-black mb-4 leading-tight" style={{ color: "rgb(var(--on-surface))" }}>
-            Welcome<br /><span style={{ color: "#00e87a" }}>Back.</span>
+          <h1 className="text-6xl font-outfit font-black mb-6 leading-tight text-white tracking-tighter">
+            Welcome<br /><span className="text-[#00e87a]">Back.</span>
           </h1>
-          <p className="mb-10 leading-relaxed" style={{ color: "rgba(186,203,186,0.7)" }}>
+          <p className="text-white/40 text-lg mb-12 leading-relaxed font-medium">
             Your crops, your data, your decisions — all in one AI-powered place.
           </p>
           <div className="space-y-4">
             {highlights.map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
-                  style={{ background: "rgba(0,232,122,0.1)", border: "1px solid rgba(0,232,122,0.2)" }}>
-                  <Icon className="w-3.5 h-3.5" style={{ color: "#00e87a" }} />
+              <div key={text} className="flex items-center gap-4">
+                <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center shrink-0 border border-white/5 shadow-inner">
+                  <Icon className="w-4 h-4 text-[#00e87a]" />
                 </div>
-                <span className="text-sm" style={{ color: "rgba(217,230,220,0.75)" }}>{text}</span>
+                <span className="text-sm font-bold text-white/40 uppercase tracking-widest">{text}</span>
               </div>
             ))}
           </div>
@@ -98,15 +93,15 @@ export default function Login() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }} className="w-full max-w-md">
           {/* Mobile logo */}
-          <div className="lg:hidden flex items-center gap-2 mb-10">
-            <Sprout className="w-7 h-7" style={{ color: "#00e87a" }} />
-            <span className="text-xl font-outfit font-bold" style={{ color: "rgb(var(--on-surface))" }}>
-              Crop<span style={{ color: "#00e87a" }}>Hub</span>
+          <div className="lg:hidden flex items-center gap-3 mb-10">
+            <Sprout className="w-8 h-8 text-[#00e87a]" />
+            <span className="text-2xl font-outfit font-black text-white">
+              Crop<span className="text-[#00e87a]">Hub</span>
             </span>
           </div>
 
-          <h2 className="text-3xl font-outfit font-black mb-1" style={{ color: "rgb(var(--on-surface))" }}>Log in</h2>
-          <p className="mb-8 text-sm" style={{ color: "rgba(186,203,186,0.7)" }}>
+          <h2 className="text-4xl font-outfit font-black mb-2 text-white">Log in</h2>
+          <p className="mb-10 text-white/40 text-sm font-medium">
             Enter your credentials to access your dashboard.
           </p>
 
@@ -119,68 +114,65 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
-            <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-sm font-medium" style={{ color: "rgba(217,230,220,0.8)" }}>Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "rgba(186,203,186,0.5)" }} />
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-xs font-bold uppercase tracking-[0.2em] text-white/20">Email Address</Label>
+              <div className="relative group">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-[#00e87a] transition-colors" />
                 <Input id="email" type="email" placeholder="farmer@crophub.com"
                   value={email} onChange={(e) => setEmail(e.target.value)}
                   required disabled={isSubmitting}
-                  className="pl-10 h-12 rounded-xl text-sm"
-                  style={{ background: "rgb(var(--surface-container))", borderColor: "rgba(0,232,122,0.15)", color: "rgb(var(--on-surface))" }} />
+                  className="pl-12 h-14 rounded-2xl text-sm bg-white/5 border-white/5 focus:border-[#00e87a]/30 focus:ring-4 focus:ring-[#00e87a]/10 text-white placeholder:text-white/10 transition-all font-medium" />
               </div>
             </div>
 
             {/* Password */}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-sm font-medium" style={{ color: "rgba(217,230,220,0.8)" }}>Password</Label>
-                <Link to="#" className="text-xs hover:underline" style={{ color: "#00e87a" }}>Forgot password?</Link>
+                <Label htmlFor="password" className="text-xs font-bold uppercase tracking-[0.2em] text-white/20">Security Key</Label>
+                <Link to="#" className="text-xs font-bold text-[#00e87a] hover:text-[#00c860] uppercase tracking-widest transition-colors">Recover Access</Link>
               </div>
-              <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "rgba(186,203,186,0.5)" }} />
+              <div className="relative group">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-[#00e87a] transition-colors" />
                 <Input id="password" type={showPassword ? "text" : "password"} placeholder="••••••••"
                   value={password} onChange={(e) => setPassword(e.target.value)}
                   required disabled={isSubmitting}
-                  className="pl-10 pr-10 h-12 rounded-xl text-sm"
-                  style={{ background: "rgb(var(--surface-container))", borderColor: "rgba(0,232,122,0.15)", color: "rgb(var(--on-surface))" }} />
+                  className="pl-12 pr-12 h-14 rounded-2xl text-sm bg-white/5 border-white/5 focus:border-[#00e87a]/30 focus:ring-4 focus:ring-[#00e87a]/10 text-white placeholder:text-white/10 transition-all font-medium" />
                 <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
-                  style={{ color: "rgba(186,203,186,0.5)" }}>
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/10 hover:text-[#00e87a] transition-colors">
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
 
             {/* Remember me */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <Checkbox id="remember" checked={remember}
-                onCheckedChange={(v) => setRemember(Boolean(v))} disabled={isSubmitting} />
-              <Label htmlFor="remember" className="text-sm cursor-pointer select-none" style={{ color: "rgba(186,203,186,0.7)" }}>
-                Remember me
+                onCheckedChange={(v) => setRemember(Boolean(v))} disabled={isSubmitting}
+                className="w-5 h-5 rounded-lg bg-white/5 border-white/10 data-[state=checked]:bg-[#00e87a] data-[state=checked]:border-[#00e87a]" />
+              <Label htmlFor="remember" className="text-xs font-bold uppercase tracking-widest text-white/30 cursor-pointer select-none">
+                Maintain Session
               </Label>
             </div>
 
             <motion.button type="submit" disabled={isSubmitting}
-              whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.98 }}
-              className="btn-primary w-full h-12 rounded-xl font-semibold flex items-center justify-center gap-2">
+              whileHover={{ scale: 1.01, y: -1 }} whileTap={{ scale: 0.99 }}
+              className="w-full h-14 rounded-2xl font-black uppercase tracking-[0.2em] flex items-center justify-center gap-4 bg-[#00e87a] text-[#003919] hover:bg-[#00c860] shadow-2xl shadow-[#00e87a]/20 transition-all disabled:opacity-50">
               {isSubmitting ? (
-                <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Logging in…</>
+                <><span className="w-5 h-5 border-4 border-[#003919]/20 border-t-[#003919] rounded-full animate-spin" /> INITIALIZING…</>
               ) : (
-                <>Log in <ArrowRight className="w-4 h-4" /></>
+                <>Log in <ArrowRight className="w-5 h-5" /></>
               )}
             </motion.button>
           </form>
 
-          <div className="flex items-center gap-3 my-6">
-            <div className="flex-1 h-px" style={{ background: "rgba(0,232,122,0.1)" }} />
-            <span className="text-xs" style={{ color: "rgba(186,203,186,0.4)" }}>or</span>
-            <div className="flex-1 h-px" style={{ background: "rgba(0,232,122,0.1)" }} />
+          <div className="flex items-center gap-4 my-8">
+            <div className="flex-1 h-px bg-white/5" />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/10">External Access</span>
+            <div className="flex-1 h-px bg-white/5" />
           </div>
 
-          <button disabled className="w-full h-12 rounded-xl flex items-center justify-center gap-2 text-sm font-medium opacity-50 cursor-not-allowed transition-colors"
-            style={{ background: "rgb(var(--surface-container))", border: "1px solid rgba(0,232,122,0.12)", color: "rgba(217,230,220,0.7)" }}>
-            <svg className="w-4 h-4" viewBox="0 0 24 24">
+          <button disabled className="w-full h-14 rounded-2xl flex items-center justify-center gap-4 text-xs font-bold uppercase tracking-widest bg-white/5 border border-white/5 text-white/40 opacity-50 cursor-not-allowed hover:bg-white/10 transition-all">
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
@@ -189,9 +181,9 @@ export default function Login() {
             Continue with Google
           </button>
 
-          <p className="text-center text-sm mt-8" style={{ color: "rgba(186,203,186,0.6)" }}>
-            Don't have an account?{" "}
-            <Link to="/signup" className="font-semibold hover:underline" style={{ color: "#00e87a" }}>Sign up</Link>
+          <p className="text-center text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] mt-10 text-white/20">
+            No secure account?{" "}
+            <Link to="/signup" className="text-[#00e87a] hover:text-[#00c860] transition-colors">Initialize Signup</Link>
           </p>
         </motion.div>
       </div>

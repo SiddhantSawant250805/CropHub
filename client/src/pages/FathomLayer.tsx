@@ -9,11 +9,11 @@ interface CropAllocation {
 }
 
 const cropDatabase = [
-  { name: "Maize",   costPerAcre: 8500,  revenuePerAcre: 18000, color: "#f5a623" },
-  { name: "Soybean", costPerAcre: 7200,  revenuePerAcre: 16000, color: "#00e87a" },
-  { name: "Wheat",   costPerAcre: 6800,  revenuePerAcre: 14500, color: "#ffb955" },
-  { name: "Rice",    costPerAcre: 10200, revenuePerAcre: 22000, color: "#c49a6c" },
-  { name: "Cotton",  costPerAcre: 9500,  revenuePerAcre: 20000, color: "#60b4ff" },
+  { name: "Maize",   costPerAcre: 8500,  revenuePerAcre: 18000, color: "#00e87a" }, // Neon Green
+  { name: "Soybean", costPerAcre: 7200,  revenuePerAcre: 16000, color: "#ffb955" }, // Harvest Gold
+  { name: "Wheat",   costPerAcre: 6800,  revenuePerAcre: 14500, color: "#00e87a" }, 
+  { name: "Rice",    costPerAcre: 10200, revenuePerAcre: 22000, color: "#ffb955" },
+  { name: "Cotton",  costPerAcre: 9500,  revenuePerAcre: 20000, color: "#00e87a" },
 ];
 
 function fmt(n: number) { return "₹" + n.toLocaleString("en-IN"); }
@@ -48,35 +48,30 @@ export default function FathomLayer() {
   return (
     <motion.div initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.08 } } }} className="space-y-6">
       <motion.div variants={fadeUp}>
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-            style={{ background: "rgba(255,185,85,0.1)", border: "1px solid rgba(255,185,85,0.2)" }}>
-            <BarChart3 className="w-4 h-4" style={{ color: "#ffb955" }} />
+        <div className="flex items-center gap-4 mb-2">
+          <div className="w-12 h-12 rounded-2xl bg-[#ffb955]/10 flex items-center justify-center border border-[#ffb955]/20 shadow-lg shadow-[#ffb955]/10">
+            <BarChart3 className="w-6 h-6 text-[#ffb955]" />
           </div>
-          <h1 className="text-3xl font-outfit font-black" style={{ color: "rgb(var(--on-surface))" }}>Fathom Layer</h1>
+          <div>
+            <h1 className="text-4xl font-black tracking-tight text-white font-outfit">Fathom Layer</h1>
+            <p className="text-white/40 text-sm font-medium uppercase tracking-widest">Predictive Optimization • Portfolio Risk Synthesis</p>
+          </div>
         </div>
-        <p className="text-sm ml-11" style={{ color: "rgba(186,203,186,0.6)" }}>
-          Predictive Optimization — maximize returns per acre
-        </p>
       </motion.div>
 
       {/* Inputs */}
       <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {[
-          { label: "Total Budget", placeholder: "e.g. 200000", prefix: "₹", value: budget, set: setBudget },
-          { label: "Land Size", placeholder: "e.g. 15", prefix: "ac", value: landSize, set: setLandSize },
+          { label: "Total Investment Budget", placeholder: "e.g. 2,00,000", prefix: "₹", value: budget, set: setBudget },
+          { label: "Cultivable Land Size", placeholder: "e.g. 15", prefix: "AC", value: landSize, set: setLandSize },
         ].map(({ label, placeholder, prefix, value, set }) => (
-          <div key={label} className="rounded-2xl p-5"
-            style={{ background: "rgb(var(--surface-container))", border: "1px solid rgba(0,232,122,0.08)" }}>
-            <label className="block text-xs font-semibold uppercase tracking-widest mb-3"
-              style={{ color: "rgba(186,203,186,0.5)" }}>{label}</label>
-            <div className="flex items-center gap-3">
-              <span className="text-lg font-bold shrink-0" style={{ color: "rgba(186,203,186,0.4)" }}>{prefix}</span>
+          <div key={label} className="glass-card rounded-3xl p-8 border border-white/5 group hover:border-[#00e87a]/20 transition-all">
+            <label className="block text-xs font-bold uppercase tracking-[0.2em] mb-6 text-white/20 group-hover:text-white/40 transition-colors">{label}</label>
+            <div className="flex items-center gap-6">
+              <span className="text-2xl font-black text-white/10">{prefix}</span>
               <input type="number" value={value} onChange={(e) => set(e.target.value)} placeholder={placeholder}
-                className="flex-1 bg-transparent outline-none font-mono text-2xl font-bold placeholder:opacity-30"
-                style={{ color: "rgb(var(--on-surface))" }} />
+                className="flex-1 bg-transparent outline-none font-outfit text-4xl font-black placeholder:text-white/5 text-white" />
             </div>
-            <div className="mt-3 h-px" style={{ background: "rgba(0,232,122,0.12)" }} />
           </div>
         ))}
       </motion.div>
@@ -85,28 +80,30 @@ export default function FathomLayer() {
       {allocations.length > 0 && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
           {/* Stacked bar */}
-          <div className="rounded-2xl p-5" style={{ background: "rgb(var(--surface-container))", border: "1px solid rgba(0,232,122,0.08)" }}>
-            <div className="flex items-center gap-2 mb-4">
-              <Wheat className="w-4 h-4" style={{ color: "#ffb955" }} />
-              <h2 className="text-sm font-semibold uppercase tracking-wider" style={{ color: "rgba(186,203,186,0.6)" }}>Crop Allocation Plan</h2>
+          <div className="glass-card rounded-[2.5rem] p-10 border border-white/5 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#00e87a]/5 via-transparent to-transparent opacity-50" />
+            <div className="flex items-center justify-between mb-8 relative z-10">
+              <div className="flex items-center gap-3">
+                <Wheat className="w-5 h-5 text-[#ffb955]" />
+                <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">Resource Allocation Plan</h2>
+              </div>
+              <span className="text-xs font-mono text-white/20 uppercase tracking-widest">Calculated by Fathom Core</span>
             </div>
-            <div className="h-10 rounded-xl overflow-hidden flex mb-3">
+            <div className="h-16 rounded-2xl overflow-hidden flex mb-8 border border-white/5 p-1 bg-black/20 relative z-10">
               {allocations.map((a, i) => (
                 <motion.div key={a.name} initial={{ width: 0 }}
                   animate={{ width: `${(a.acres / totalAcres) * 100}%` }}
-                  transition={{ duration: 0.8, delay: i * 0.1, ease: "easeOut" }}
-                  style={{ background: a.color }} className="h-full flex items-center justify-center">
-                  {a.acres >= totalAcres * 0.15 && (
-                    <span className="text-xs font-mono font-bold text-black/70">{a.acres}ac</span>
-                  )}
+                  transition={{ duration: 1, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ background: a.color }} className="relative h-full first:rounded-l-xl last:rounded-r-xl group">
+                  <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </motion.div>
               ))}
             </div>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-6 relative z-10">
               {allocations.map((a) => (
-                <div key={a.name} className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-sm" style={{ background: a.color }} />
-                  <span className="text-xs" style={{ color: "rgba(217,230,220,0.7)" }}>{a.name}</span>
+                <div key={a.name} className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full shadow-[0_0_10px_rgba(0,0,0,0.5)]" style={{ background: a.color }} />
+                  <span className="text-xs font-bold text-white/50 uppercase tracking-widest">{a.name}</span>
                 </div>
               ))}
             </div>
@@ -120,25 +117,28 @@ export default function FathomLayer() {
                 <motion.div key={a.name}
                   initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 + i * 0.1 }}
-                  className="rounded-2xl p-4"
-                  style={{ background: "rgb(var(--surface-container))", borderTop: `3px solid ${a.color}`, border: `1px solid rgba(0,232,122,0.06)`, borderTopColor: a.color }}>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <Leaf className="w-4 h-4" style={{ color: a.color }} />
-                      <span className="font-semibold text-sm" style={{ color: "rgb(var(--on-surface))" }}>{a.name}</span>
+                  className="glass-card rounded-[2rem] p-8 border border-white/5 group hover:border-white/20 transition-all">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5">
+                        <Leaf className="w-5 h-5" style={{ color: a.color }} />
+                      </div>
+                      <span className="font-black text-lg text-white font-outfit uppercase tracking-tight">{a.name}</span>
                     </div>
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                      style={{ background: `${a.color}18`, color: a.color }}>{margin}% margin</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-lg border border-white/10 text-white/40 group-hover:text-white/80 transition-colors">{margin}% PROFIT</span>
                   </div>
-                  <div className="space-y-1.5 text-xs">
+                  <div className="space-y-4">
                     {[
-                      { label: "Acres",         val: a.acres.toString() },
-                      { label: "Cost",          val: fmt(a.cost) },
-                      { label: "Est. Revenue",  val: fmt(a.expectedRevenue), accent: true },
-                    ].map(({ label, val, accent }) => (
-                      <div key={label} className="flex justify-between">
-                        <span style={{ color: "rgba(186,203,186,0.5)" }}>{label}</span>
-                        <span className="font-mono font-semibold" style={{ color: accent ? a.color : "rgb(var(--on-surface))" }}>{val}</span>
+                      { label: "Planned Scale", val: `${a.acres} ac`, icon: Wheat },
+                      { label: "Operation Cost", val: fmt(a.cost), icon: IndianRupee },
+                      { label: "Target Alpha", val: fmt(a.expectedRevenue), icon: TrendingUp, color: a.color },
+                    ].map(({ label, val, icon: Icon, color }) => (
+                      <div key={label} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+                        <div className="flex items-center gap-2">
+                          <Icon className="w-3.5 h-3.5 text-white/20" />
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-white/20">{label}</span>
+                        </div>
+                        <span className="text-sm font-black font-mono" style={{ color: color || "white" }}>{val}</span>
                       </div>
                     ))}
                   </div>
@@ -148,20 +148,21 @@ export default function FathomLayer() {
           </div>
 
           {/* Summary */}
-          <div className="rounded-2xl p-5" style={{ background: "linear-gradient(135deg, rgba(0,232,122,0.06) 0%, rgba(0,232,122,0.02) 100%)", border: "1px solid rgba(0,232,122,0.2)" }}>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="glass-card rounded-[2.5rem] p-10 border border-[#00e87a]/20 bg-gradient-to-br from-[#00e87a]/10 to-transparent">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
               {[
-                { label: "Total Allocated", val: `${totalAcres} acres`,      icon: Leaf,          color: "#00e87a" },
-                { label: "Total Cost",       val: fmt(totalCost),             icon: IndianRupee,   color: "#ffb955" },
-                { label: "Est. Revenue",     val: fmt(totalRevenue),          icon: TrendingUp,    color: "#00e87a" },
-                { label: "Expected Profit",  val: fmt(totalProfit),           icon: BarChart3,     color: "#00e87a" },
+                { label: "Portfolio Size", val: `${totalAcres} AC`,  icon: Wheat,        color: "#00e87a" },
+                { label: "Total Exposure", val: fmt(totalCost),    icon: IndianRupee,  color: "#ffb955" },
+                { label: "Gross Target",   val: fmt(totalRevenue), icon: TrendingUp,    color: "#00e87a" },
+                { label: "Projected Alpha",val: fmt(totalProfit),  icon: BarChart3,     color: "#00e87a" },
               ].map(({ label, val, icon: Icon, color }) => (
-                <div key={label}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Icon className="w-3.5 h-3.5" style={{ color }} />
-                    <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgba(186,203,186,0.5)" }}>{label}</p>
+                <div key={label} className="relative group">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Icon className="w-5 h-5" style={{ color }} />
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">{label}</p>
                   </div>
-                  <p className="font-mono text-xl font-black" style={{ color }}>{val}</p>
+                  <p className="font-outfit text-4xl font-black tracking-tighter" style={{ color }}>{val}</p>
+                  <div className="absolute -bottom-4 left-0 w-8 h-1 rounded-full group-hover:w-full transition-all duration-500" style={{ background: color, opacity: 0.3 }} />
                 </div>
               ))}
             </div>
@@ -170,10 +171,11 @@ export default function FathomLayer() {
       )}
 
       {!budget && !landSize && (
-        <motion.div variants={fadeUp} className="rounded-2xl p-8 text-center"
-          style={{ background: "rgb(var(--surface-container))", border: "1px dashed rgba(0,232,122,0.15)" }}>
-          <BarChart3 className="w-10 h-10 mx-auto mb-3 opacity-30" style={{ color: "#ffb955" }} />
-          <p className="text-sm" style={{ color: "rgba(186,203,186,0.5)" }}>Enter your budget and land size above to generate an AI allocation plan.</p>
+        <motion.div variants={fadeUp} className="glass-card rounded-[2.5rem] p-20 text-center border border-white/5 relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent" />
+          <BarChart3 className="w-20 h-20 mx-auto mb-8 text-white/5 group-hover:text-[#00e87a]/20 transition-colors duration-700" />
+          <h3 className="text-2xl font-black text-white/40 font-outfit uppercase tracking-tight mb-2">Engine Pending Initialization</h3>
+          <p className="text-white/20 text-xs font-bold uppercase tracking-widest">Enter portfolio constraints above to activate Fathom Core optimization.</p>
         </motion.div>
       )}
     </motion.div>

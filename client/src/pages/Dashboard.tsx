@@ -13,14 +13,14 @@ const fadeUp = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transi
 const statusColors: Record<string, string> = {
   Growing:    "#00e87a",
   Planted:    "#ffb955",
-  Harvesting: "#c49a6c",
+  Harvesting: "#00e87a",
 };
 
 const quickActions = [
-  { label: "Scan Soil",      icon: Layers,    path: "/terra",     color: "#00e87a",  bg: "rgba(0,232,122,0.08)" },
-  { label: "Plan Budget",    icon: BarChart3,  path: "/fathom",    color: "#ffb955",  bg: "rgba(255,185,85,0.08)" },
-  { label: "Check Markets",  icon: Truck,      path: "/logistics", color: "#c49a6c",  bg: "rgba(196,154,108,0.08)" },
-  { label: "View Reports",   icon: FileText,   path: "#",          color: "rgba(186,203,186,0.6)", bg: "rgba(186,203,186,0.05)" },
+  { label: "Scan Soil",      icon: Layers,    path: "/terra",     color: "#00e87a", bg: "rgba(0, 232, 122, 0.1)" },
+  { label: "Plan Budget",    icon: BarChart3,  path: "/fathom",    color: "#ffb955", bg: "rgba(255, 185, 85, 0.1)" },
+  { label: "Check Markets",  icon: Truck,      path: "/logistics", color: "#00e87a", bg: "rgba(0, 232, 122, 0.1)" },
+  { label: "View Reports",   icon: FileText,   path: "#",          color: "rgba(186, 203, 186, 0.6)", bg: "rgba(255, 255, 255, 0.05)" },
 ];
 
 export default function Dashboard() {
@@ -34,148 +34,111 @@ export default function Dashboard() {
       {/* ── Header ── */}
       <motion.div variants={fadeUp} className="flex items-start justify-between">
         <div>
-          <p className="text-sm mb-0.5" style={{ color: "rgba(186,203,186,0.5)" }}>{today}</p>
-          <h1 className="text-3xl font-outfit font-black" style={{ color: "rgb(var(--on-surface))" }}>
+          <p className="text-xs font-mono font-bold text-[#00e87a] uppercase tracking-widest mb-1">{today}</p>
+          <h1 className="text-4xl font-black tracking-tight text-white font-outfit">
             {greeting}{user?.name ? `, ${user.name.split(" ")[0]}` : ""} 👋
           </h1>
-          <p className="text-sm mt-1" style={{ color: "rgba(186,203,186,0.6)" }}>
-            Here's an overview of your agricultural operations.
-          </p>
+          <p className="text-white/40 mt-1">Here's what's happening on your farm today.</p>
         </div>
-        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
-          style={{ background: "rgba(0,232,122,0.08)", border: "1px solid rgba(0,232,122,0.2)", color: "#00e87a" }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-          Live data
+        <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#0e1412] border border-white/5 shadow-xl">
+          <span className="flex h-2 w-2 rounded-full bg-[#00e87a] animate-pulse" />
+          <span className="text-xs font-bold text-white/70 uppercase tracking-wider">Live System Path</span>
         </div>
       </motion.div>
 
       {/* ── Weather Widget ── */}
-      <motion.div variants={fadeUp} className="rounded-2xl p-6"
-        style={{ background: "rgb(var(--surface-container))", border: "1px solid rgba(0,232,122,0.08)" }}>
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(186,203,186,0.5)" }}>
-            Today's Conditions
-          </h2>
-          <span className="text-xs" style={{ color: "rgba(186,203,186,0.4)" }}>Pune, Maharashtra · Updated now</span>
+      <motion.div variants={fadeUp} className="glass-card rounded-[2rem] p-8 border border-white/5 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-8 opacity-10">
+          <Wind className="w-24 h-24 text-[#00e87a]" />
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="flex items-center justify-between mb-8 relative z-10">
+          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">Today's Conditions</h2>
+          <span className="text-xs text-white/20 font-mono">PUNE, MH • UPDATED 2M AGO</span>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
           {[
-            { icon: Thermometer, label: "Temperature", value: "28°C", sub: "Feels like 31°C", color: "#ff8c42" },
-            { icon: Droplets,    label: "Humidity",    value: "64%",  sub: "Moderate",        color: "#60b4ff" },
-            { icon: Cloud,       label: "Rainfall",    value: "12mm", sub: "Expected today",  color: "#a0c4ff" },
-            { icon: Wind,        label: "Wind",        value: "14 km/h", sub: "NE Direction", color: "#00e87a" },
+            { icon: Thermometer, label: "Temp", value: "28°C", sub: "Feels like 31°C", color: "#ffb955" },
+            { icon: Droplets,    label: "Humidity", value: "64%",  sub: "Optimal", color: "#00e87a" },
+            { icon: Cloud,       label: "Precip", value: "12mm", sub: "Light Rain", color: "#00e87a" },
+            { icon: Wind,        label: "Wind", value: "14km/h", sub: "NE Direction", color: "#00e87a" },
           ].map(({ icon: Icon, label, value, sub, color }) => (
-            <div key={label} className="flex flex-col gap-1">
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center"
-                  style={{ background: `${color}14` }}>
-                  <Icon className="w-3.5 h-3.5" style={{ color }} />
+            <div key={label} className="space-y-1">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
+                  <Icon className="w-4 h-4" style={{ color }} />
                 </div>
-                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: "rgba(186,203,186,0.5)" }}>{label}</span>
+                <span className="text-xs font-bold text-white/30 uppercase tracking-widest">{label}</span>
               </div>
-              <p className="text-2xl font-black font-outfit" style={{ color: "rgb(var(--on-surface))" }}>{value}</p>
-              <p className="text-xs" style={{ color: "rgba(186,203,186,0.5)" }}>{sub}</p>
+              <p className="text-3xl font-black text-white font-outfit">{value}</p>
+              <p className="text-[10px] font-bold text-white/20 uppercase tracking-wider">{sub}</p>
             </div>
           ))}
         </div>
       </motion.div>
 
-      {/* ── Summary Cards ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Active Crop Plans */}
-        <motion.div variants={fadeUp} className="rounded-2xl p-5"
-          style={{ background: "rgb(var(--surface-container))", border: "1px solid rgba(0,232,122,0.08)" }}>
-          <div className="flex items-start justify-between mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div variants={fadeUp} className="glass-card p-6 rounded-[1.5rem] border border-white/5 relative group">
+          <div className="flex items-start justify-between mb-6">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: "rgba(186,203,186,0.5)" }}>Active Crop Plans</p>
-              <p className="text-4xl font-black font-outfit" style={{ color: "rgb(var(--on-surface))" }}>4</p>
+              <p className="text-xs font-bold text-white/30 uppercase tracking-widest mb-2 font-mono">Active Plans</p>
+              <h3 className="text-5xl font-black text-white font-outfit">4</h3>
             </div>
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ background: "rgba(0,232,122,0.1)", border: "1px solid rgba(0,232,122,0.2)" }}>
-              <Sprout className="w-5 h-5" style={{ color: "#00e87a" }} />
-            </div>
-          </div>
-          <div className="space-y-2.5">
-            {[
-              { name: "Maize",   acres: "12", status: "Growing" },
-              { name: "Soybean", acres: "8",  status: "Planted" },
-              { name: "Wheat",   acres: "5",  status: "Harvesting" },
-              { name: "Rice",    acres: "10", status: "Growing" },
-            ].map(({ name, acres, status }) => (
-              <div key={name} className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full shrink-0" style={{ background: statusColors[status] }} />
-                  <span className="font-medium" style={{ color: "rgb(var(--on-surface))" }}>{name}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="font-mono text-xs" style={{ color: "rgba(186,203,186,0.5)" }}>{acres} ac</span>
-                  <span className="text-xs px-2 py-0.5 rounded-full font-medium"
-                    style={{ background: `${statusColors[status]}14`, color: statusColors[status] }}>
-                    {status}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Market Alerts */}
-        <motion.div variants={fadeUp} className="rounded-2xl p-5"
-          style={{ background: "rgb(var(--surface-container))", border: "1px solid rgba(0,232,122,0.08)" }}>
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: "rgba(186,203,186,0.5)" }}>Market Alerts</p>
-              <p className="text-4xl font-black font-outfit" style={{ color: "rgb(var(--on-surface))" }}>3</p>
-            </div>
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ background: "rgba(255,185,85,0.1)", border: "1px solid rgba(255,185,85,0.2)" }}>
-              <TrendingUp className="w-5 h-5" style={{ color: "#ffb955" }} />
+            <div className="w-12 h-12 rounded-2xl bg-[#00e87a]/10 flex items-center justify-center border border-[#00e87a]/20">
+              <Sprout className="w-6 h-6 text-[#00e87a]" />
             </div>
           </div>
           <div className="space-y-3">
-            {[
-              { type: "up",      message: "Maize prices up 8% at Mandi B" },
-              { type: "warning", message: "Soybean supply surplus expected" },
-              { type: "up",      message: "Wheat demand rising in Region C" },
-            ].map(({ type, message }) => (
-              <div key={message} className="flex items-start gap-3 p-2.5 rounded-lg"
-                style={{ background: type === "up" ? "rgba(0,232,122,0.04)" : "rgba(255,185,85,0.04)",
-                         borderLeft: `2px solid ${type === "up" ? "#00e87a" : "#ffb955"}` }}>
-                {type === "up"
-                  ? <TrendingUp className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "#00e87a" }} />
-                  : <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "#ffb955" }} />}
-                <span className="text-xs leading-relaxed" style={{ color: "rgba(217,230,220,0.8)" }}>{message}</span>
+            {[{ n: "Maize", a: "12", s: "Growing" }, { n: "Soybean", a: "8", s: "Planted" }, { n: "Wheat", a: "5", s: "Harvesting" }].map(c => (
+              <div key={c.n} className="flex items-center justify-between text-sm">
+                <div className="flex items-center gap-3">
+                  <div className={`w-1.5 h-1.5 rounded-full ${c.s==='Growing'?'bg-[#00e87a]':'bg-[#ffb955]'}`} />
+                  <span className="font-bold text-white/80">{c.n}</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="text-xs font-mono text-white/20">{c.a}ac</span>
+                  <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${c.s==='Growing'?'bg-[#00e87a]/10 text-[#00e87a]':'bg-[#ffb955]/10 text-[#ffb955]'}`}>{c.s}</span>
+                </div>
               </div>
             ))}
           </div>
         </motion.div>
 
-        {/* Season Profit */}
-        <motion.div variants={fadeUp} className="rounded-2xl p-5"
-          style={{ background: "rgb(var(--surface-container))", border: "1px solid rgba(0,232,122,0.08)" }}>
-          <div className="flex items-start justify-between mb-4">
+        <motion.div variants={fadeUp} className="glass-card p-6 rounded-[1.5rem] border border-white/5 relative group">
+          <div className="flex items-start justify-between mb-6">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: "rgba(186,203,186,0.5)" }}>Season Profit</p>
-              <p className="text-3xl font-black font-outfit" style={{ color: "#ffb955" }}>₹4,82,000</p>
+              <p className="text-xs font-bold text-white/30 uppercase tracking-widest mb-2 font-mono">Market Insights</p>
+              <h3 className="text-5xl font-black text-white font-outfit">3</h3>
             </div>
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ background: "rgba(0,232,122,0.1)", border: "1px solid rgba(0,232,122,0.2)" }}>
-              <ArrowUpRight className="w-5 h-5" style={{ color: "#00e87a" }} />
+            <div className="w-12 h-12 rounded-2xl bg-[#ffb955]/10 flex items-center justify-center border border-[#ffb955]/20">
+              <TrendingUp className="w-6 h-6 text-[#ffb955]" />
             </div>
           </div>
-          <div className="mt-4 space-y-2">
-            <div className="flex justify-between text-xs">
-              <span style={{ color: "rgba(186,203,186,0.6)" }}>Budget utilized</span>
-              <span className="font-mono font-semibold" style={{ color: "#00e87a" }}>67%</span>
+          <div className="space-y-4">
+            {["Maize prices up 8% in Mandi B", "Wheat demand rising in Region C"].map(m => (
+              <div key={m} className="flex items-center gap-3 text-xs font-medium text-white/60 p-3 rounded-xl bg-white/5 border border-white/5">
+                <ArrowUpRight className="w-4 h-4 text-[#00e87a]" /> {m}
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div variants={fadeUp} className="glass-card p-6 rounded-[1.5rem] border border-white/10 relative overflow-hidden bg-gradient-to-br from-[#00e87a]/10 to-transparent">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <p className="text-xs font-bold text-white/30 uppercase tracking-widest mb-2 font-mono">Season Profit</p>
+              <h3 className="text-4xl font-black text-[#00e87a] font-outfit">₹4,82,000</h3>
             </div>
-            <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: "rgba(0,232,122,0.08)" }}>
-              <motion.div initial={{ width: 0 }} animate={{ width: "67%" }}
-                transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
-                className="h-full rounded-full"
-                style={{ background: "linear-gradient(90deg, #00e87a, #85ffa7)" }} />
+            <div className="w-12 h-12 rounded-2xl bg-[#00e87a]/20 flex items-center justify-center border border-[#00e87a]/30 shadow-lg shadow-[#00e87a]/20">
+              <TrendingUp className="w-6 h-6 text-[#00e87a]" />
             </div>
-            <div className="flex justify-between text-xs mt-3" style={{ color: "rgba(186,203,186,0.5)" }}>
-              <span>₹0</span><span>₹7,20,000 target</span>
+          </div>
+          <div className="mt-8 space-y-4">
+            <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-white/40">
+              <span>Budget Utilized</span>
+              <span className="text-[#00e87a]">67%</span>
+            </div>
+            <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+              <motion.div initial={{ width: 0 }} animate={{ width: "67%" }} transition={{ duration: 1, delay: 0.5 }} className="h-full bg-gradient-to-r from-[#00e87a] to-[#00c860]" />
             </div>
           </div>
         </motion.div>
@@ -183,23 +146,18 @@ export default function Dashboard() {
 
       {/* ── Quick Actions ── */}
       <motion.div variants={fadeUp}>
-        <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "rgba(186,203,186,0.4)" }}>Quick Actions</p>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <p className="text-xs font-bold text-white/20 uppercase tracking-[0.2em] mb-4 font-mono">Quick Actions</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {quickActions.map(({ label, icon: Icon, path, color, bg }) => (
-            <Link key={label} to={path}
-              className="group flex items-center gap-3 p-4 rounded-2xl transition-all duration-200 hover:scale-[1.02]"
-              style={{ background: "rgb(var(--surface-container))", border: "1px solid rgba(0,232,122,0.06)" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = `${color}30`; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,232,122,0.06)"; }}>
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all group-hover:scale-110"
-                style={{ background: bg }}>
-                <Icon className="w-4 h-4" style={{ color }} />
+            <Link key={label} to={path} className="glass-card flex items-center justify-between p-5 rounded-2xl border border-white/5 hover:border-white/20 transition-all group overflow-hidden relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <div className="flex items-center gap-4 relative z-10">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: bg }}>
+                  <Icon className="w-5 h-5" style={{ color }} />
+                </div>
+                <span className="text-sm font-bold text-white tracking-wide">{label}</span>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold truncate" style={{ color: "rgb(var(--on-surface))" }}>{label}</p>
-              </div>
-              <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-                style={{ color }} />
+              <ArrowRight className="w-4 h-4 text-white/20 group-hover:text-[#00e87a] group-hover:translate-x-1 transition-all relative z-10" />
             </Link>
           ))}
         </div>
